@@ -1,0 +1,400 @@
+.uploadControls {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+/* upload.css or index.css */
+.panel .panelTitle,
+.panelTitle {
+  color: #D95300;
+  font-size: 32px;
+  margin: 0 0 8px;
+}
+
+.uploadCard {
+  width: 100%;
+  max-width: 480px;
+  box-sizing: border-box;
+  background-color: #ffffff;
+  border: 2px solid #D95300;
+  border-radius: 12px;
+  padding: 28px 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.uploadForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.fileInput {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  font-family: Calibri, Carlito, sans-serif;
+  font-size: 16px;
+  color: #000000;
+  text-align: center;
+}
+
+.fileHint {
+  font-size: 16px;
+  color: #333333;
+  margin: 0;
+  text-align: center;
+}
+
+.uploadBtn {
+  background-color: #D95300;
+  color: #ffffff;
+  border: none;
+  border-radius: 16px;
+  padding: 10px 32px;
+  font-family: Calibri, Carlito, sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.uploadBtn:hover {
+  background-color: #fff3e0;
+  color: #D95300;
+}
+.errorMsg {
+  color: #c62828;
+  font-weight: bold;
+  text-align: center;
+  margin: 16px 0 0;
+}
+
+/* Results layout: centered panels */
+.splitView {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.panel {
+  background-color: #ffffff;
+  color: #000000;
+  box-sizing: border-box;
+}
+
+.leftPanel {
+  flex: 2 1 600px;
+  min-width: 0;
+}
+
+.rightPanel {
+  flex: 1 1 280px;
+  min-width: 0;
+}
+
+.panelHeader {
+  margin-bottom: 12px;
+}
+
+.datasetMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 14px;
+  color: #000000;
+}
+
+.tableScroll {
+  overflow-x: auto;
+  border: 1px solid #000000;
+}
+
+.dictTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  color: #000000;
+}
+
+.dictTable th,
+.dictTable td {
+  border: 1px solid #cccccc;
+  padding: 8px 10px;
+  text-align: left;
+  vertical-align: top;
+  color: #000000;
+  background-color: #ffffff;
+}
+
+.dictTable th {
+  font-weight: bold;
+  color: #D95300;
+}
+
+.colName {
+  font-weight: bold;
+}
+
+.typeBadge {
+  display: inline-block;
+  padding: 2px 6px;
+  border: 1px solid #000000;
+  font-size: 12px;
+}
+
+.samples {
+  min-width: 140px;
+}
+
+.chip {
+  display: inline-block;
+  margin: 2px 4px 2px 0;
+  padding: 2px 6px;
+  border: 1px solid #cccccc;
+  font-size: 12px;
+  color: #000000;
+}
+
+.chip.small {
+  margin-left: 8px;
+}
+
+.desc {
+  min-width: 180px;
+}
+
+.contextSection {
+  margin-bottom: 20px;
+}
+
+.contextSection h3 {
+  margin: 0 0 8px;
+  color: #000000;
+  font-size: 18px;
+}
+
+.domainTag {
+  font-weight: bold;
+  margin: 0 0 8px;
+}
+
+.review {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.expertList,
+.resourceList {
+  padding-left: 18px;
+  margin: 0;
+}
+
+.expertList li,
+.resourceList li {
+  margin-bottom: 10px;
+}
+
+.expertList p {
+  margin: 4px 0;
+}
+
+.role {
+  color: #000000;
+}
+
+.muted {
+  color: #000000;
+  opacity: 0.7;
+}
+
+.rightPanel a,
+.leftPanel a {
+  color: #000000;
+}
+
+.aiWarning {
+  color: #c62828;
+  font-weight: bold;
+  text-align: center;
+  margin: 16px 0 0;
+}
+
+.reviewAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #EA580C;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.reviewAction:hover {
+  background-color: #FFF7ED;
+  color: #FB923C;
+}
+
+.reviewAction:focus-visible {
+  outline: 2px solid #EA580C;
+  outline-offset: 2px;
+}
+
+.reviewAction svg {
+  width: 16px;
+  height: 16px;
+}
+
+
+.descriptionEditor {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 180px;
+}
+
+.descriptionEditor textarea,
+.notesCell textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px;
+  border: 1px solid #FED7AA;
+  border-radius: 6px;
+  font: inherit;
+  resize: vertical;
+}
+
+.descriptionEditor textarea:focus,
+.notesCell textarea:focus {
+  outline: 2px solid #FB923C;
+  outline-offset: 1px;
+}
+
+.notesCell {
+  min-width: 190px;
+  vertical-align: top;
+}
+
+.notesCell textarea {
+  margin-top: 8px;
+}
+
+.reviewStatus {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  background: #FFF7ED;
+  color: #9A3412;
+}
+
+.reviewStatus.confirmed {
+  background: #DCFCE7;
+  color: #166534;
+}
+
+.reviewStatus.edited {
+  background: #FFEDD5;
+  color: #9A3412;
+}
+
+.reviewStatus.rejected {
+  background: #FEE2E2;
+  color: #991B1B;
+}
+
+.reviewStatus.flagged {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.reviewStatus.pending {
+  background: #F3F4F6;
+  color: #4B5563;
+}
+
+.navbar_buttons {
+  display: flex;
+  justify-content: center;  
+  align-items: center;      
+  background-color: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  font-family: Calibri, Carlito, sans-serif;
+  padding: 12px 0;           /* give it a little breathing room */
+}
+
+.navbar-inner_buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 12px;
+  padding: 12px 24px;
+}
+
+.navbar_buttons button {
+  background-color: #D95300;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 20px;
+  font-family: Calibri, Carlito, sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.navbar_buttons button:hover {
+  background-color: #fff3e0;
+  color: #D95300;
+}
+
+
+
+.navbar_buttons button:focus-visible {
+  outline: 2px solid #000000;
+  outline-offset: 2px;
+}
+
+
+.datasetMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin: 0 0 16px;
+  font-size: 14px;
+  color: #000000;
+}
+
+.datasetMeta span {
+  display: inline-block;
+  padding: 4px 12px;
+  border: 1px solid #000000;
+  border-radius: 999px;
+  background-color: #ffffff;
+  color: #000000;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.datasetMeta span:first-child {
+  font-weight: bold;
+}
+
+.datasetMeta span:nth-child(4) {
+  border-color: #D95300;
+  color: #D95300;
+}
+
+.datasetMeta span:nth-child(5) {
+  border-color: #c62828;
+  color: #c62828;
+}
+

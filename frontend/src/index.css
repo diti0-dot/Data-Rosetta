@@ -1,0 +1,17 @@
+.panelTitle {
+  color: #D95300;
+  font-size: 32px;
+  margin: 0 0 8px;
+}
+
+/* upload.css or index.css */
+.panel .panelTitle,
+.panelTitle {
+  color: #D95300;
+  font-size: 32px;
+  margin: 0 0 8px;
+}
+
+.emptyState{
+    text-align: center;
+}

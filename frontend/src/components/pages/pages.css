@@ -1,0 +1,182 @@
+
+
+/* ---------- How it works ---------- */
+.how-it-works {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  font-family: Calibri, Carlito, sans-serif;
+  color: #333333;
+  background-color: #ffffff;
+  text-align: left;
+}
+
+.how-title {
+  color: #D95300;
+  font-size: 40px;
+  margin: 0 0 24px;
+  text-align: center;
+}
+
+.section-heading {
+  color: #000000;
+  font-size: 28px;
+  margin: 32px 0 12px;
+}
+
+.section-heading.orange {
+  color: #D95300;
+}
+
+.lead {
+  font-size: 18px;
+  line-height: 1.6;
+  margin: 0 0 16px;
+}
+
+.source {
+  font-size: 14px;
+  margin: 0 0 16px;
+}
+
+.source a {
+  color: #D95300;
+}
+
+.steps {
+  margin-top: 32px;
+}
+
+.step {
+  margin-bottom: 24px;
+}
+
+.step-title {
+  color: #000000;
+  font-size: 22px;
+  margin: 0 0 6px;
+}
+
+.step-text {
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.columns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 48px;
+  margin-top: 16px;
+}
+
+.column {
+  flex: 1 1 400px;
+  min-width: 0;
+}
+
+.featureList {
+  padding-left: 20px;
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.featureList li {
+  margin-bottom: 8px;
+}
+
+/* ---------- FAQ ---------- */
+.faq {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  font-family: Calibri, Carlito, sans-serif;
+  color: #333333;
+  background-color: #ffffff;
+  text-align: left;
+}
+
+.faq-title {
+  color: #D95300;
+  font-size: 40px;
+  margin: 0 0 24px;
+  text-align: center;
+}
+
+.faq-item {
+  margin-bottom: 24px;
+}
+
+.faq-question {
+  color: #000000;
+  font-size: 20px;
+  margin: 0 0 8px;
+}
+
+.faq-answer {
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ---------- Accessibility ---------- */
+
+
+
+/* ---------- Contact ---------- */
+.legal {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  font-family: Calibri, Carlito, sans-serif;
+  color: #333333;
+  background-color: #ffffff;
+  text-align: left;
+}
+
+.legal-title {
+  color: #D95300;
+  font-size: 40px;
+  margin: 0 0 8px;
+  text-align: center;
+}
+
+.legal-updated {
+  font-size: 14px;
+  color: #666666;
+  margin: 0 0 24px;
+}
+
+.legal-lead {
+  font-size: 18px;
+  line-height: 1.6;
+  margin: 0 0 24px;
+}
+
+.legal-h2 {
+  color: #000000;
+  font-size: 24px;
+  margin: 32px 0 8px;
+}
+
+.legal-p {
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0 0 12px;
+}
+
+.legal-list {
+  padding-left: 20px;
+  margin: 0 0 12px;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.legal-list li {
+  margin-bottom: 8px;
+}
+
+.legal a {
+  color: #D95300;
+}

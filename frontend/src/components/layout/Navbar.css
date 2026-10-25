@@ -1,0 +1,37 @@
+.navbar-wrapper {
+  font-family: Calibri, Carlito, sans-serif;
+}
+
+.navbar {
+  background-color: #ffffff;
+  color: #000000;
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 24px;
+  padding: 12px 24px;
+}
+
+.navbar-logo {
+  height: 80px;
+  width: auto;
+  border-radius: 4px;
+}
+
+.navbar-link {
+  color: #000000;
+  text-decoration: none;
+  font-family: Calibri, Carlito, sans-serif;
+  font-size: 18px;
+}
+
+.navbar-link:hover {
+  text-decoration: underline;
+}

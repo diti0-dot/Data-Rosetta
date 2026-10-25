@@ -1,0 +1,40 @@
+.page-accessibility {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  background-color: #ffffff;
+  color: #333333;
+  font-family: Calibri, Carlito, sans-serif;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.accessibility-title {
+  color: #D95300;
+  font-size: 40px;
+  margin: 0 0 16px;
+}
+
+.page-accessibility .dictIntro {
+  max-width: 700px;
+  margin: 0 auto 32px;
+  font-size: 18px;
+  line-height: 1.6;
+  color: #333333;
+}
+
+.wip-logo {
+  display: block;
+  max-width: 400px;
+  width: 100%;
+  height: auto;
+  margin: 0 auto 24px;
+  border-radius: 8px;
+}
+
+.page-accessibility h2 {
+  color: #000000;
+  font-size: 28px;
+  letter-spacing: 2px;
+  margin: 0;
+}

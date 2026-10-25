@@ -1,0 +1,144 @@
+.history-container,
+.history-empty {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  background-color: #ffffff;
+  color: #333333;
+  font-family: Calibri, Carlito, sans-serif;
+  text-align: left;
+  box-sizing: border-box;
+}
+
+.history-container h2,
+.history-empty h2 {
+  color: #D95300;
+  font-size: 32px;
+  margin: 0 0 8px;
+}
+
+.history-container > p,
+.history-empty p {
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0 0 24px;
+}
+
+.history-file {
+  padding: 16px 0;
+  border-top: 1px solid #e0e0e0;
+}
+
+.history-file:last-child {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.history-file-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.history-file-header h3 {
+  color: #000000;
+  font-size: 22px;
+  margin: 0 0 4px;
+}
+
+.history-file-header p {
+  font-size: 14px;
+  color: #666666;
+  margin: 0 0 2px;
+}
+
+.history-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.history-actions button {
+  background-color: #D95300;
+  color: #ffffff;
+  border: 2px solid #D95300;
+  border-radius: 8px;
+  padding: 6px 16px;
+  font-family: Calibri, Carlito, sans-serif;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.history-actions button:hover {
+  background-color: #b84600;
+  border-color: #b84600;
+}
+
+.history-actions button:disabled {
+  background-color: #ffffff;
+  color: #D95300;
+  opacity: 0.6;
+  cursor: default;
+}
+
+.history-actions button:focus-visible {
+  outline: 2px solid #000000;
+  outline-offset: 2px;
+}
+
+.history-table-wrapper {
+  margin-top: 16px;
+  overflow-x: auto;
+  border: 1px solid #000000;
+}
+
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  color: #000000;
+  background-color: #ffffff;
+}
+
+.history-table th,
+.history-table td {
+  border: 1px solid #cccccc;
+  padding: 8px 10px;
+  text-align: left;
+  vertical-align: top;
+  color: #000000;
+  background-color: #ffffff;
+}
+
+.history-table th {
+  font-weight: bold;
+  color: #D95300;
+}
+
+/* Review status pills */
+.review-status {
+  display: inline-block;
+  padding: 2px 10px;
+  border: 1px solid #000000;
+  border-radius: 999px;
+  font-size: 12px;
+  text-transform: capitalize;
+  color: #000000;
+  background-color: #ffffff;
+}
+
+.review-status.confirmed {
+  border-color: #D95300;
+  color: #D95300;
+}
+
+.review-status.flagged {
+  border-color: #c62828;
+  color: #c62828;
+}
+
+.review-status.pending {
+  border-color: #888888;
+  color: #666666;
+}
