@@ -35,14 +35,12 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://data-rosetta.vercel.app/",
+        "https://data-rosetta.vercel.app",
         "http://localhost:5173",
     ],
-    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 @app.get("/")
 def read_root() -> dict[str, str]:
