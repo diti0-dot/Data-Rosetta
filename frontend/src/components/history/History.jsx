@@ -57,7 +57,9 @@ function ColumnsTable({ fileId, profile }) {
                     "Unnamed"
                   )}
                 </td>
-                <td>{toDisplayText(firstDefinedValue(column, TYPE_KEYS, null))}</td>
+                <td>
+                  <span className="typeBadge">{column.inferred_type ?? "-"}</span>
+                </td>
                 <td>{toDisplayText(column.description)}</td>
                 <td>
                   <span className={`review-status ${status}`}>
