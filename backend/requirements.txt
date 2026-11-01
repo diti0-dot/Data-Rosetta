@@ -4,3 +4,5 @@ pandas
 python-multipart
 openpyxl
 pyarrow
+python-dotenv
+google-genai

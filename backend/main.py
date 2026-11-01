@@ -17,7 +17,6 @@ logger = logging.getLogger(__name__)
 
 MAX_UPLOAD_BYTES = 50 * 1024 * 1024
 SAMPLE_VALUE_COUNT = 5
-ALLOWED_ORIGINS = os.getenv("CORS_ORIGINS", "http://localhost:5173").split(",")
 
 # Maps each supported extension to the pandas reader that parses it.
 READERS: dict[str, Callable[[io.BytesIO], pd.DataFrame]] = {
@@ -35,12 +34,13 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=ALLOWED_ORIGINS,
-    allow_credentials=True,
+    allow_origins=[
+        "https://data-rosetta.vercel.app",
+        "http://localhost:5173",
+    ],
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 @app.get("/")
 def read_root() -> dict[str, str]:
