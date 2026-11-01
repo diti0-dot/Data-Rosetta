@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import Navbar from './components/layout/Navbar.jsx';
 import Footer from './components/layout/FooterTemp.jsx';
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from "@vercel/analytics/react"
 
 import './App.css'
 
