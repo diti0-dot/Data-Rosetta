@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trending Websites Across Europe During the Microsoft Outage</title>
+<script charset="utf-8" src="https://cdn.plot.ly/plotly-4.1.1.min.js" integrity="sha256-O24V1F27f8pb0glCkelh3cVHLNiHAJ5gCaVtq2aNch8=" crossorigin="anonymous"></script>
+<style>
+  :root {
+    --accent: #D95300;
+    --ink: #1e293b;
+    --muted: #64748b;
+    --line: #e2e8f0;
+    --sea: #eef3f8;
+    --land: #dde4ec;
+    --font: Calibri, Carlito, "Segoe UI", Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #fff; font-family: var(--font); color: var(--ink); }
+  .container { max-width: 1700px; margin: 0 auto; padding: 24px clamp(12px, 2vw, 32px) 32px; }
+
+  .header h1 { color: var(--accent); font-size: clamp(26px, 3vw, 38px); line-height: 1.15; margin: 0 0 6px; }
+  .header p { color: var(--muted); font-size: 18px; margin: 0 0 18px; max-width: 70ch; }
+
+  .intro {
+  max-width: 800px;
+  margin: 0 auto 32px;
+  padding: 32px 24px 0;
+  background-color: #ffffff;
+  color: #333333;
+  font-family: Calibri, Carlito, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.intro h2 {
+  color: #D95300;
+  font-size: 32px;
+  line-height: 1.3;
+  margin: 0 0 16px;
+}
+
+.intro p {
+  margin: 0 0 16px;
+}
+
+.intro strong {
+  color: #000000;
+}
+.note { font-size: 15px; color: var(--muted); border-left: 3px solid var(--accent); padding-left: 12px; margin-top: 16px; }
+
+  .controls { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; margin-bottom: 14px; }
+  .control { display: flex; gap: 8px; align-items: center; font-size: 16px; }
+  .control label { font-weight: bold; }
+  select, button {
+    font-family: var(--font); font-size: 16px; color: #000; background: #fff;
+    border: 1px solid #94a3b8; border-radius: 6px; padding: 7px 12px; cursor: pointer;
+  }
+  select { min-width: 190px; }
+  button:hover, select:hover { border-color: var(--accent); }
+  select:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .layout { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 20px; align-items: start; }
+
+  .map-card { border: 1px solid var(--line); border-radius: 8px; background: var(--sea); overflow: hidden; }
+  #europe-map { width: 100%; height: clamp(600px, 82vh, 980px); }
+  .map-note { font-size: 13px; color: var(--muted); padding: 8px 14px; background: #fff; border-top: 1px solid var(--line); }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; padding: 12px 14px 14px; background: #fff; border-top: 1px solid var(--line); font-size: 14px; }
+  .legend-item { display: flex; gap: 6px; align-items: center; }
+  .swatch { width: 12px; height: 12px; border-radius: 3px; flex: none; }
+  .legend-count { color: var(--muted); }
+
+  .details-card {
+    border: 1px solid var(--line); border-radius: 8px; padding: 16px 18px;
+    position: sticky; top: 16px; max-height: calc(100vh - 32px); overflow-y: auto;
+  }
+  .details-card h2 { color: var(--accent); font-size: 24px; margin: 0 0 4px; }
+  .hint { color: var(--muted); font-size: 14px; margin: 0 0 10px; }
+
+  .domain-item { padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .domain-item:last-child { border-bottom: 0; }
+  .domain-name { font-weight: bold; overflow-wrap: anywhere; }
+  .rank { color: var(--accent); margin-right: 6px; }
+  .category { display: inline-flex; gap: 6px; align-items: center; font-size: 12px; margin-top: 4px; color: #334155; }
+  .bar-row { display: flex; align-items: center; gap: 8px; margin-top: 6px; font-size: 13px; color: var(--muted); }
+  .bar { flex: 1; height: 6px; background: #f1f5f9; border-radius: 3px; overflow: hidden; }
+  .bar span { display: block; height: 100%; background: var(--accent); border-radius: 3px; }
+
+  @media (max-width: 1000px) {
+    .layout { grid-template-columns: 1fr; }
+    .details-card { position: static; max-height: none; }
+    #europe-map { height: 75vh; min-height: 480px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>Trending Websites Across Europe During the Microsoft Outage</h1>
+    <p>The websites that were trending across Europe during the Microsoft 365 outage, November 12–13, 2026.</p>
+    <p class="note"><strong>Note on timing.</strong> The outage began at 5 p.m. Dutch time on 12 November, after most of the European working day. As a result, data for 13 November likely reflects the outage period in Europe more closely.</p>
+    <br>
+    <p>These are websites that saw an increase in popularity in Cloudflare's data during the selected date. They are not necessarily the most visited websites. The ranking shows which websites were gaining attention, not how many people visited them.</p>
+  </div>
+
+  <div class="controls">
+    <div class="control">
+      <label for="dateSelect">Date</label>
+      <select id="dateSelect"></select>
+    </div>
+    <div class="control">
+      <label for="labelSelect">Map labels</label>
+      <select id="labelSelect">
+        <option value="full" selected>Top website + category</option>
+        <option value="domain">Top website only</option>
+        <option value="off">No labels</option>
+      </select>
+    </div>
+    <button id="resetView" type="button">Reset zoom</button>
+  </div>
+
+  <div class="layout">
+    <div class="map-card">
+      <div id="europe-map"></div>
+      <div class="map-note">Scroll or pinch to zoom in on crowded areas. Very small countries (Andorra, Liechtenstein, Luxembourg, Malta, Monaco, San Marino) have no label; hover or click them for details.</div>
+      <div id="legend" class="legend"></div>
+    </div>
+
+    <aside class="details-card" id="details"></aside>
+  </div>
+</div>
+
+  <section class="intro">
+    <h2>Which domains experienced rising popularity during the outage observation period?</h2>
+    <p>On 12 November 2026, a Microsoft 365 outage disrupted several services, primarily Exchange Online, including Outlook, Teams and Copilot. Users were unable to send or receive email or access their inboxes, and the disruption extended into the following workday across Europe. Microsoft’s Service Health recorded the incident as lasting 30 hours. Because so many workplaces rely on these tools, the outage affected normal working patterns for a large share of users.</p>
+    <p>This analysis looks at which domains gained popularity across Europe during the outage observation period of 12–13 November 2026. It uses Cloudflare’s trending-domain data, which ranks domains by how much their popularity rank rose in each country. The map shows the top trending domain and its category for each country, and selecting a country shows its full top 10 for the chosen date.</p>
+    <p><strong>12 November.</strong> On the first day, the top trending domains varied widely by country and category. Job search sites led in Ireland, Andorra and Cyprus. Educational institutions ranked highly in Spain and Poland. Information security and remote-access tools led in Monaco. Ecommerce, clothing and television sites led in countries such as Czechia, the United Kingdom and Bulgaria.</p>
+    <p><strong>13 November.</strong> On the second day, the results were more uniform. The YouTube analytics tool vidiq.com was the top trending domain in 11 countries. Gaming domains led in Estonia and Latvia, while Spain and Türkiye were led by finance and television sites.</p>
+    <p><strong>Denmark.</strong> One notable result is meesho.com, an Indian ecommerce marketplace, which was Denmark’s top trending domain on 12 November. Its rise does not have a clear explanation from this data alone. The trending metric measures change in rank rather than total traffic, so a domain with little traffic can rise sharply from a relatively small increase in visits.</p>
+  </section>
+
+<script>
+/* ---------- Data: for each date and country, the top 10 domains as [domain, category, rank change %] ---------- */
+const NAMES = {AND:"Andorra",ALB:"Albania",AUT:"Austria",BIH:"Bosnia and Herzegovina",BEL:"Belgium",BGR:"Bulgaria",BLR:"Belarus",CHE:"Switzerland",CYP:"Cyprus",CZE:"Czechia",DEU:"Germany",DNK:"Denmark",EST:"Estonia",ESP:"Spain",FIN:"Finland",FRA:"France",GBR:"United Kingdom",GRC:"Greece",HRV:"Croatia",HUN:"Hungary",IRL:"Ireland",ISL:"Iceland",ITA:"Italy",LIE:"Liechtenstein",LTU:"Lithuania",LUX:"Luxembourg",LVA:"Latvia",MCO:"Monaco",MDA:"Moldova",MNE:"Montenegro",MKD:"North Macedonia",MLT:"Malta",NLD:"Netherlands",NOR:"Norway",POL:"Poland",PRT:"Portugal",ROU:"Romania",SRB:"Serbia",RUS:"Russian Federation",SWE:"Sweden",SVN:"Slovenia",SVK:"Slovakia",SMR:"San Marino",TUR:"Türkiye",UKR:"Ukraine"};
+
+const RAW = {
+"2026-11-12": {
+AND:[["paloaltonetworks.com","Information Technology",83.11],["adzuna.com.br","Job Search & Careers",77.21],["ubuntu.com","Technology",71.79],["cloudflare.com","Technology",64.29],["adzuna.fr","Job Search & Careers",63.28],["statsig.com","Business",61.85],["adzuna.com","Job Search & Careers",60.53],["youtube-nocookie.com","Video Streaming",57.39],["slack.com","Instant Messengers",51.13],["indeed.com","Job Search & Careers",47.98]],
+ALB:[["revolve.com","Clothing",61.71],["carbonbeamwheels.com","Ecommerce",55.53],["smile.io","Business",51.05],["feefo.com","Business",49.17],["lemmy.world","Forums",48.74],["scalemates.com","Forums",46.51],["carta.menu","Food & Drink",44.99],["arquivo.pt","Search Engines",44.8],["dbpedia.org","Technology",43.22],["snapcraft.io","Information Technology",42.77]],
+AUT:[["hargassner.com","Ecommerce",78.64],["floxis.tech","Business",54.92],["vogue.de","Fashion",52.71],["tampermonkey.net","Shareware/Freeware",42.53],["sueddeutsche.de","News & Media",42.01],["flyflair.com","",37.85],["altair.com","Technology",37.75],["zain.com","Information Technology",37.36],["brigitte.de","Magazines",37.18],["yupoo.com","Photography",37.11]],
+BIH:[["revolve.com","Clothing",68.92],["anotv.org","Login Screens",60.74],["loadbee.com","Business",57.33],["careerstructure.com","Job Search & Careers",51.55],["vndb.org","Comic Books",49.34],["spreadshirt.ie","Fashion",48.87],["thereformation.com","Clothing",47.89],["vivo.com.cn","Technology",46.71],["mixpanel.com","Business",46.08],["nextdirect.com","Clothing",45.98]],
+BEL:[["galaxus.be","Ecommerce",56.32],["csic.es","Education",56.14],["livingspaces.com","Business",55.07],["fast.com","Information Technology",53.1],["z33.be","Entertainment",51.46],["homes.com","Real Estate",46.85],["purdue.edu","Educational Institutions",46.26],["hawaii.edu","Educational Institutions",45.16],["handelsregister.de","Government/Legal",44.85],["barnesandnoble.com","Education",42.38]],
+BGR:[["zee5.com","Television",62.61],["profitableratecpmnetwork.com","Search Engines",59.21],["viva.gr","Travel",54.52],["makemytrip.com","Travel",52.47],["mrporter.com","Fashion",52.33],["amazon.pl","Ecommerce",51.32],["lu.se","Educational Institutions",51.0],["boulevardbulgaria.bg","News & Media",50.44],["xy5jg.com","Business",50.21],["forbes.com","Economy & Finance",49.23]],
+BLR:[["idriver.by","Vehicles",63.48],["mercadolivre.com.br","Ecommerce",59.18],["belavia.by","",53.37],["azbyka.ru","Religion & Spirituality",50.98],["svoboda.org","News & Media",42.75],["contentful.com","Technology",42.57],["yazio.com","",38.57],["tumblr.com","Social Networks",38.02],["nongnu.org","Shareware/Freeware",37.03],["loveplanet.ru","Dating & Relationships",36.8]],
+CHE:[["weblaw.ch","News & Media",40.51],["tampermonkey.net","Shareware/Freeware",37.39],["futunn.com","Personal Finance",36.3],["deutschlandfunk.de","Audio Streaming",36.23],["sharkninja.com","Business",35.87],["orbitxch.com","Sports",35.33],["republik.ch","Magazines",34.27],["tistory.com","Personal Blogs",34.23],["vedomosti.ru","News & Media",32.85],["supsi.ch","Education",32.47]],
+CYP:[["glassdoor.com","Job Search & Careers",51.98],["gree.com","Home & Garden",50.02],["notability.com","Technology",47.77],["ptb.de","Educational Institutions",45.49],["storyteller.ai","Artificial Intelligence",45.49],["t-mobile.com","Information Technology",42.82],["sunmi.com","Technology",42.06],["miraheze.org","Education",40.8],["freedom.to","Shareware/Freeware",38.84],["snapcraft.io","Information Technology",37.31]],
+CZE:[["8a.cz","Arts",97.93],["mironet.cz","Ecommerce",75.88],["eberry.cz","Home & Garden",73.35],["falabella.com","Ecommerce",72.4],["cars.cz","Auctions & Marketplaces",72.02],["onlineshop.cz","Ecommerce",71.33],["mercadolivre.com.br","Ecommerce",65.07],["kaufland.de","Ecommerce",62.58],["fdcservers.net","Information Technology",54.8],["sfr.fr","Information Technology",53.37]],
+DEU:[["abendblatt.de","News & Media",52.05],["tampermonkey.net","Shareware/Freeware",47.03],["terra.com.br","News & Media",46.88],["digitale-sammlungen.de","Education",44.8],["snapcraft.io","Information Technology",37.12],["koshelek.app","Coupons",37.0],["uni-hannover.de","Educational Institutions",35.93],["kobv.de","Reference",34.85],["gamepro.de","Gaming",34.77],["jiosaavn.com","Audio Streaming",33.5]],
+DNK:[["meesho.com","Ecommerce",65.33],["businesswire.com","Business",49.23],["radb.net","Technology",45.01],["uefa.com","Sports",44.05],["streamyard.com","Business",43.95],["mexc.com","Cryptocurrency",41.93],["huawei.ru","Technology",40.02],["mercadolivre.com.br","Ecommerce",39.91],["lemmy.world","Forums",39.54],["esa.int","Space & Astronomy",39.08]],
+EST:[["tampermonkey.net","Shareware/Freeware",49.5],["snapcraft.io","Information Technology",44.92],["koshelek.app","Coupons",36.79],["podrygka.ru","Fashion",34.04],["gaijin.net","Gaming",33.09],["lb-api-rt.com","",32.15],["ibm.com","Technology",29.44],["seznam.cz","News & Media",29.11],["1mi.media","News & Media",26.07],["venice.ai","CIPA Filter",25.38]],
+ESP:[["fecyt.es","Education",63.96],["proz.com","Job Search & Careers",63.65],["umh.es","Educational Institutions",62.73],["arquivo.pt","Search Engines",62.62],["lake-link.com","Health & Fitness",58.71],["jiosaavn.com","Audio Streaming",56.78],["uib.cat","Educational Institutions",55.71],["careerstructure.com","Job Search & Careers",54.6],["ujaen.es","Educational Institutions",53.74],["twitcasting.tv","Video Streaming",51.36]],
+FIN:[["kicks.fi","Fashion",52.93],["virgilio.it","News & Media",51.41],["flypobeda.ru","Travel",50.67],["tampermonkey.net","Shareware/Freeware",45.52],["gaijin.net","Gaming",45.41],["koshelek.app","Coupons",42.14],["git-scm.com","Technology",41.12],["earthlink.net","Information Technology",39.55],["matas.dk","Fashion",37.7],["bullshot.io","Economy & Finance",36.43]],
+FRA:[["falabella.com","Ecommerce",51.14],["koshelek.app","Coupons",42.94],["snapcraft.io","Information Technology",41.44],["terra.com.br","News & Media",38.92],["tampermonkey.net","Shareware/Freeware",36.87],["proz.com","Job Search & Careers",35.26],["mercadolivre.com.br","Ecommerce",34.33],["latribune.fr","News & Media",33.25],["mitel.com","Technology",32.87],["fb.gg","Social Networks",32.26]],
+GBR:[["newbalance.co.uk","Clothing",74.99],["nautil.us","Magazines",50.41],["proz.com","Job Search & Careers",48.42],["trustasia.com","Technology",47.69],["blackhawknetwork.com","Business",42.63],["samsclub.com","Ecommerce",38.67],["blockshopper.com","Real Estate",35.27],["twitcasting.tv","Video Streaming",35.19],["ticketmaster.es","Entertainment",34.28],["ehayes.com","Safe for Kids",30.87]],
+GRC:[["bglobale.com","",48.84],["euroleaguebasketball.net","News & Media",46.65],["autodoc.gr","Ecommerce",44.1],["kikocosmetics.gr","Fashion",41.77],["athenarc.gr","Educational Institutions",41.51],["cortextech.io","Business",40.83],["falabella.com","Ecommerce",40.53],["sodapdf.com","Technology",38.3],["midhudsonlibraries.org","Education",38.02],["dustandcream.gr","Fashion",36.93]],
+HRV:[["mercadolivre.com.br","Ecommerce",46.7],["tailwindcss.com","Information Technology",40.5],["moemax.com","Business",40.09],["termius.com","Technology",40.07],["pngwing.com","Information Technology",40.06],["storifyme.xyz","Business",39.4],["favi.hr","Business",36.84],["kde.org","Technology",36.05],["grass.io","Information Technology",35.24],["cenoteka.rs","Food & Drink",34.48]],
+HUN:[["ys7.com","Business",53.68],["baidu.com","Search Engines",51.0],["4ig.hu","Business",49.27],["eset.com","Technology",48.57],["gvh.hu","Education",43.63],["bing.com","Search Engines",43.59],["spamhaus.org","Information Security",43.24],["snapcraft.io","Information Technology",41.98],["magyarhirlap.hu","News & Media",41.34],["chameleon-smarthome.com","Technology",39.9]],
+IRL:[["freelancer.ie","Job Search & Careers",73.17],["hpra.ie","Politics, Advocacy, and Government-Related",67.29],["eil.com","Music",66.9],["prozorro.sale","Economy & Finance",66.81],["lot-tissimo.com","Auctions & Marketplaces",65.96],["ombudsman.ie","Politics, Advocacy, and Government-Related",64.13],["twitcasting.tv","Video Streaming",59.15],["emag.bg","Home & Garden",55.58],["retailchoice.com","Job Search & Careers",54.1],["geogebra.org","Education",53.69]],
+ISL:[["hagkaup.is","Business",58.0],["unisoc.com","Technology",51.74],["getflowbox.com","Business",51.26],["pocketnet.app","",48.07],["dw.com","News & Media",46.74],["sourceforge.net","Business",46.58],["latana.com","Business",46.46],["tenderly.co","Business",45.83],["runwayml.com","Artificial Intelligence",45.34],["coolshop.com","Ecommerce",43.5]],
+ITA:[["falabella.com","Ecommerce",65.93],["mister-auto.it","Vehicles",63.58],["unipi.it","Educational Institutions",58.79],["careerstructure.com","Job Search & Careers",58.04],["alfemminile.com","News & Media",57.93],["senato.it","Politics, Advocacy, and Government-Related",49.84],["unigre.it","Education",47.77],["bachpan.com","Parenting",44.71],["avvenire.it","News & Media",44.61],["automoto.it","Vehicles",43.47]],
+LIE:[["webex.com","Technology",56.15],["onetrust.com","Information Security",46.56],["swisscom.ch","Information Technology",41.2],["dell.com","Technology",38.7],["pinterest.com","Photography",34.73],["adkernel.com","Business",32.5],["anthropic.com","Artificial Intelligence",32.35],["docker.com","Technology",29.47],["weather.com","News & Media",27.21],["canva.com","Technology",25.68]],
+LTU:[["exblog.jp","Personal Blogs",53.04],["zalando.de","Fashion",48.16],["yale.edu","Educational Institutions",46.24],["incrowdsports.com","Shareware/Freeware",45.98],["eset.com","Technology",42.73],["sap.com","Business",41.14],["mercadolivre.com.br","Ecommerce",41.01],["snapcraft.io","Information Technology",39.86],["radijas.lt","Coupons",39.46],["elektrum.lt","Business",38.87]],
+LUX:[["nih.gov","Government/Legal",48.44],["pump.fun","Cryptocurrency",42.46],["snapcraft.io","Information Technology",42.41],["lesfrontaliers.lu","News & Media",38.84],["orange.lu","Information Technology",38.47],["sprinklr.com","Business",37.7],["mdpi.com","Education",33.77],["maestra.io","Business",31.5],["onorca.dev","Technology",31.45],["ard.de","News & Media",31.18]],
+LVA:[["tampermonkey.net","Shareware/Freeware",53.19],["snapcraft.io","Information Technology",46.53],["hm.com","Fashion",42.41],["koshelek.app","Coupons",41.6],["msu.ru","Educational Institutions",36.97],["livedigital.space","Technology",33.19],["appewa.com","Education",32.4],["gmx.com","Webmail",32.35],["ctrip.com","Travel",32.12],["fedex.com","Business",31.17]],
+MCO:[["bitdefender.com","Information Security",64.66],["kaspersky.com","Technology",58.72],["quickconnect.to","Technology",57.01],["anydesk.com","Remote Access",55.2],["linkedin.com","Professional Networking",52.26],["notion.com","Artificial Intelligence",52.04],["webex.com","Technology",50.0],["adzuna.de","Job Search & Careers",50.0],["mempool.space","Humor",48.02],["bing.com","Search Engines",45.8]],
+MDA:[["esa.int","Space & Astronomy",66.97],["dbpedia.org","Technology",53.72],["revolve.com","Clothing",53.02],["mercadolivre.com.br","Ecommerce",51.6],["spotify.com","Audio Streaming",50.0],["utexas.edu","Educational Institutions",49.18],["habitaclia.com","Real Estate",48.65],["airbnb.com","Travel",44.01],["glassdoor.com","Job Search & Careers",43.4],["steamcommunity.com","Forums",42.31]],
+MNE:[["tumblr.com","Social Networks",47.94],["moloco.com","Technology",44.28],["nytimes.com","News & Media",39.2],["rainberrytv.com","Television",38.65],["figma.com","Technology",36.67],["x.com","Social Networks",33.33],["atulsongaday.me","Personal Blogs",32.84],["wechat.com","Instant Messengers",31.8],["checkpoint.com","Information Technology",29.25],["primevideo.com","Television",29.04]],
+MKD:[["letterboxd.com","Social Networks",57.39],["tenda.com.cn","Technology",42.29],["disneyplus.com","Safe for Kids",41.74],["samsara.com","Business",39.2],["livejournal.com","Social Networks",38.99],["datasheetq.com","Technology",38.78],["miraheze.org","Education",37.71],["x.com","Social Networks",37.14],["geotrust.com","Information Security",36.65],["getyourguide.com","Travel",36.36]],
+MLT:[["mux.com","Technology",52.27],["wise.com","Economy & Finance",45.35],["rudderstack.com","Business",43.51],["preyproject.com","Information Security",41.43],["userreport.com","Business",39.85],["miro.com","Technology",39.83],["hybrid.ai","Business",39.8],["granola.ai","Artificial Intelligence",39.05],["ecosia.org","Charity and Non-profit",38.72],["cline.bot","Artificial Intelligence",37.96]],
+NLD:[["flypobeda.ru","Travel",54.69],["tampermonkey.net","Shareware/Freeware",47.61],["koshelek.app","Coupons",41.4],["snapcraft.io","Information Technology",39.71],["gaijin.net","Gaming",35.35],["abv.bg","Webmail",34.38],["centrum.cz","News & Media",33.67],["kadaster.nl","Education",32.74],["deepai.org","Artificial Intelligence",29.77],["mail.tm","Webmail",29.04]],
+NOR:[["linkfusion.no","Technology",58.57],["nytelse.no","CIPA Filter",47.04],["myaqsh.com","Shareware/Freeware",46.16],["navimow.com","Ecommerce",46.03],["byggmax.se","Ecommerce",45.44],["bambuser.com","Business",37.97],["twentythree.com","Business",37.36],["clockify.me","Business",37.04],["ivanti.com","Technology",36.9],["planhat.com","Business",35.59]],
+POL:[["transportgzm.pl","Shareware/Freeware",60.37],["parp.gov.pl","Politics, Advocacy, and Government-Related",60.04],["plus.pl","Information Technology",59.23],["agh.edu.pl","Educational Institutions",48.33],["pw.edu.pl","Educational Institutions",48.24],["pscp.tv","Social Networks",47.79],["umk.pl","Educational Institutions",43.44],["amu.edu.pl","Educational Institutions",43.05],["pan.pl","Education",42.34],["warszawa.pl","",40.44]],
+PRT:[["sicnoticias.pt","News & Media",64.38],["falabella.com","Ecommerce",63.96],["arquivo.pt","Search Engines",62.59],["floxis.tech","Business",55.24],["apartments.com","Real Estate",45.2],["snapcraft.io","Information Technology",42.53],["sfr.fr","Information Technology",38.09],["shopee.co.id","Ecommerce",36.67],["miraheze.org","Education",35.45],["kde.org","Technology",34.76]],
+ROU:[["reginald.ro","Clothing",46.25],["lemmy.world","Forums",41.51],["clockify.me","Business",41.24],["bitdefender.es","Technology",41.08],["bitdefender.nl","Information Security",40.45],["mercadolivre.com.br","Ecommerce",40.29],["koshelek.app","Coupons",40.07],["bitdefender.it","File Sharing",39.21],["bitdefender.se","Information Security",39.1],["si.edu","Educational Institutions",37.27]],
+SRB:[["context7.com","Business",61.67],["dunkest.com","Gaming",55.78],["crealitycloud.com","Shareware/Freeware",49.42],["immobilienscout24.de","Real Estate",46.51],["ifconfig.me","Information Technology",46.49],["fdcservers.net","Information Technology",43.92],["squarespace.com","Information Technology",42.68],["nb.rs","Education",41.9],["sendsay.ru","Business",41.13],["blogger.com","Personal Blogs",38.94]],
+RUS:[["ras.ru","Educational Institutions",61.69],["academic.ru","Reference",58.68],["pawns.app","Economy & Finance",57.37],["flypobeda.ru","Travel",52.52],["ifood.com.br","Food & Drink",49.75],["pravoved.ru","Government/Legal",48.87],["korpanmarina.ru","Health & Fitness",48.25],["idealo.de","Shopping",47.1],["mos-gorsud.ru","Government/Legal",44.98],["airwallex.com","Business",43.6]],
+SWE:[["tampermonkey.net","Shareware/Freeware",46.6],["onelink.to","Technology",44.43],["flypobeda.ru","Travel",42.87],["snapcraft.io","Information Technology",42.58],["comviq.se","Technology",35.41],["transistor.fm","Shareware/Freeware",33.36],["koshelek.app","Coupons",31.53],["cloudmark.com","Information Security",30.07],["ey.com","Business",29.65],["folksam.se","Economy & Finance",28.78]],
+SVN:[["zalando.com","Fashion",46.64],["glami.si","Clothing",42.32],["rocketreach.co","Business",41.4],["pdq.com","Remote Access",40.96],["lacnic.net","Politics, Advocacy, and Government-Related",40.12],["context7.com","Business",37.83],["statcounter.com","Business",37.33],["worldcat.org","Education",36.99],["unwomen.org","Politics, Advocacy, and Government-Related",35.26],["cornell.edu","Educational Institutions",34.53]],
+SVK:[["ifconfig.me","Information Technology",78.6],["ip-api.com","Technology",52.38],["ipinfo.io","Technology",50.0],["floxis.tech","Business",45.89],["glassdoor.com","Job Search & Careers",39.42],["airbridge.io","Business",37.62],["rocketreach.co","Business",37.44],["itch.io","Gaming",36.67],["kde.org","Technology",36.65],["snapcraft.io","Information Technology",36.06]],
+SMR:[["intel.com","Technology",37.91],["launchdarkly.com","Business",34.07],["office.com","Business",30.0],["mozilla.org","Technology",28.57],["sentry.io","Business",26.81],["nvidia.com","Technology",21.98],["facebook.com","Social Networks",20.0],["netflix.com","Movies",17.39],["booking.com","Travel",15.82],["tp-link.com","Technology",15.15]],
+TUR:[["careerstructure.com","Job Search & Careers",58.06],["wvu.edu","Educational Institutions",55.37],["revolve.com","Clothing",54.4],["carbonbeamwheels.com","Ecommerce",51.73],["glassdoor.com","Job Search & Careers",51.43],["dataraflow.org","Technology",50.86],["generalimp.com","Business",49.75],["adskeeper.com","Business",46.87],["blockshopper.com","Real Estate",45.98],["boats.com","Vehicles",41.98]],
+UKR:[["anwb.nl","Economy & Finance",77.52],["revolve.com","Clothing",68.48],["apostrophe.ua","News & Media",63.4],["pawns.app","Economy & Finance",62.81],["careerstructure.com","Job Search & Careers",58.28],["lpnu.ua","Educational Institutions",53.29],["lukso.network","Technology",53.12],["naurok.com.ua","Education",50.16],["fordforums.com.au","Forums",49.44],["epravda.com.ua","News & Media",49.25]]
+},
+"2026-11-13": {
+AND:[["growthbook.io","Business",73.06],["permutive.com","Business",56.01],["mi.com","Information Technology",51.38],["speedtest.net","Information Technology",48.67],["ipinfo.io","Technology",46.43],["hcaptcha.com","Information Security",32.99],["garmin.com","Fashion",31.76],["office.com","Business",30.0],["saudia.com","Travel",27.05],["oxylabs.io","Technology",25.65]],
+ALB:[["sp.gov.br","Politics, Advocacy, and Government-Related",65.55],["un.org","Politics, Advocacy, and Government-Related",54.88],["oracle.com","Technology",54.36],["hcrealms.com","Forums",54.06],["simplywall.st","Technology",51.53],["vfsglobal.com","Politics, Advocacy, and Government-Related",50.89],["duashpi.al","Real Estate",50.3],["ourcommons.ca","Politics, Advocacy, and Government-Related",47.72],["cafe24.com","Information Technology",47.5],["greaterwrong.com","News & Media",47.49]],
+AUT:[["utopia.de","Forums",64.95],["profil.at","News & Media",59.19],["bambuser.com","Business",53.22],["notino.com","Fashion",50.19],["kicker.at","Sports",46.01],["luigisbox.com","Ecommerce",43.36],["csa-iot.org","Technology",39.45],["cafe24.com","Information Technology",39.45],["vidiq.com","Business",39.07],["iqdigital.de","Business",37.33]],
+BIH:[["vidiq.com","Business",56.95],["datasheetbank.com","Reference",53.8],["bvsalud.org","Education",51.87],["mitari.nl","Ecommerce",46.92],["locknewslab.com","Gaming",46.13],["amazon.sa","Ecommerce",45.7],["todesktop.com","Business",44.59],["titanos.tv","Shareware/Freeware",44.15],["csmobiles.com","Ecommerce",43.97],["brother.com","Technology",42.34]],
+BEL:[["vidiq.com","Business",51.29],["flodesk.com","Business",50.39],["adidas.be","Fashion",48.68],["forbes.com","Economy & Finance",44.41],["bandicam.com","Information Technology",38.07],["asu.edu","Educational Institutions",37.64],["mosmetro.ru","Travel",37.26],["rubrik.com","Technology",36.23],["slido.com","Information Technology",36.2],["vtm.be","Television",35.57]],
+BGR:[["photo-forum.net","Forums",75.1],["strategy.bg","Politics, Advocacy, and Government-Related",66.23],["customs.bg","Politics, Advocacy, and Government-Related",59.63],["bdz.bg","Travel",57.62],["vidiq.com","Business",57.49],["jysk.com","Business",55.88],["mobilebulgaria.com","Technology",54.66],["jysk.bg","Business",53.43],["isitetv.com","Business",52.89],["ffmpeg.org","Information Technology",51.47]],
+BLR:[["qxwz.com","Ecommerce",54.06],["stay22.com","Trackers/Analytics",46.81],["arkoselabs.com","Information Security",46.07],["livechat.com","Instant Messengers",45.49],["exlibrisgroup.com","",43.69],["idriver.by","Vehicles",42.32],["onet.pl","News & Media",40.07],["telegram.org","Instant Messengers",40.0],["blockifyapp.com","Technology",39.47],["companyspace.com","Real Estate",38.28]],
+CHE:[["notino.com","Fashion",55.59],["ucoz.ru","Information Technology",54.92],["kurier.at","News & Media",51.64],["vidiq.com","Business",45.96],["luigisbox.com","Ecommerce",45.78],["titanos.tv","Shareware/Freeware",45.65],["bambuser.com","Business",44.87],["fcix.net","",43.02],["paramountplus.com","Television",39.52],["innovid.com","Business",38.06]],
+CYP:[["netgear.com","Business",76.52],["pcloud.com","File Sharing",71.2],["abela.io","Business",65.79],["paloaltonetworks.com","Information Technology",61.14],["ys7.com","Business",61.13],["jup.ag","Cryptocurrency",61.08],["harman.com","Business",56.57],["cafe24.com","Information Technology",56.26],["circleci.com","Technology",48.91],["webshare.io","Business",45.35]],
+CZE:[["manuals.plus","Reference",67.77],["osu.cz","Educational Institutions",66.08],["davidsport.cz","Fashion",63.68],["sp.gov.br","Politics, Advocacy, and Government-Related",60.18],["wn24.cz","News & Media",58.18],["bigo.sg","Technology",56.43],["posters.cz","Ecommerce",55.81],["ekatalog.cz","Shopping",54.8],["maminka.cz","Magazines",54.58],["swgoh.gg","Gaming",53.45]],
+DEU:[["vidiq.com","Business",49.16],["netzwelt.de","Technology",47.88],["titanos.tv","Shareware/Freeware",44.79],["abendblatt.de","News & Media",39.81],["csa-iot.org","Technology",37.38],["wdr.de","News & Media",34.06],["escapefromtarkov.com","Gaming",33.65],["uni-mannheim.de","Educational Institutions",33.05],["kurogames.net","Gaming",32.25],["interia.pl","News & Media",31.34]],
+DNK:[["vidiq.com","Business",46.84],["manuals.plus","Reference",41.75],["verkada.com","Business",40.64],["boligejer.dk","Real Estate",40.03],["pawns.app","Economy & Finance",39.4],["au.dk","Educational Institutions",39.36],["bricklink.com","Auctions & Marketplaces",37.67],["notino.dk","Fashion",37.09],["pngtree.com","Photography",36.59],["sp.gov.br","Politics, Advocacy, and Government-Related",36.32]],
+EST:[["escapefromtarkov.com","Gaming",43.55],["fa.ru","Educational Institutions",32.96],["aol.com","News & Media",31.27],["zerion.io","Economy & Finance",29.8],["archive.org","Reference",29.75],["yaga.ee","Ecommerce",27.59],["larksuite.com","Technology",26.96],["ntfy.sh","Technology",26.85],["clamav.net","Information Security",26.79],["fitbase.io","Business",26.32]],
+ESP:[["forbes.com","Economy & Finance",83.28],["kfc.es","Food & Drink",57.92],["revistavanityfair.es","Entertainment",57.3],["vidiq.com","Business",55.68],["hardreset.info","Technology",52.87],["usc.es","Educational Institutions",50.99],["urjc.es","Educational Institutions",50.18],["clara.es","Fashion",49.22],["qidian.com","Education",48.3],["apistogramma.com","Forums",45.2]],
+FIN:[["netbsd.org","Technology",53.77],["vidiq.com","Business",50.06],["escapefromtarkov.com","Gaming",44.02],["nextcloud.com","Technology",38.91],["doria.fi","Education",38.74],["maptiler.com","Technology",37.26],["rustore.ru","Gaming",35.82],["git-scm.com","Technology",31.39],["1und1.de","Information Technology",30.65],["fortune.com","Magazines",29.78]],
+FRA:[["futura-sciences.com","Education",66.33],["latribune.fr","News & Media",55.98],["lamontagne.fr","News & Media",51.14],["vidiq.com","Business",48.89],["caviledmuckmentanglo.com","Technology",40.16],["u-paris.fr","Educational Institutions",38.13],["titanos.tv","Shareware/Freeware",37.75],["acer.com","Information Technology",36.38],["fastweb.it","Information Technology",31.15],["csa-iot.org","Technology",30.63]],
+GBR:[["vidiq.com","Business",55.95],["vice.com","News & Media",52.48],["yuewen.com","Education",51.5],["hamleys.com","Ecommerce",47.26],["ticketmaster.ie","Ecommerce",39.92],["pressandjournal.co.uk","News & Media",37.57],["livescience.com","Magazines",36.87],["hollywoodreporter.com","Entertainment",36.66],["kotaku.com","Gaming",36.57],["menards.com","Ecommerce",36.3]],
+GRC:[["sp.gov.br","Politics, Advocacy, and Government-Related",63.49],["elli.eco","Business",58.84],["mister-auto.com","Ecommerce",55.47],["ellak.gr","Shareware/Freeware",54.9],["socialchain.app","Technology",52.76],["atticadps.gr","Clothing",47.45],["exblog.jp","Personal Blogs",47.26],["talentlms.com","Technology",46.16],["instructure.com","Education",45.54],["jimdo.com","",44.76]],
+HRV:[["vidiq.com","Business",48.92],["cafe24.com","Information Technology",38.9],["bigo.sg","Technology",38.52],["chrono24.com","Fashion",37.55],["mpg.de","Education",37.12],["appodeal.com","Business",35.43],["eknjizara.hr","Education",34.27],["buyma.com","Ecommerce",34.11],["qualcomm.com","Technology",33.98],["gymbeam.hr","Ecommerce",33.02]],
+HUN:[["farnell.com","Technology",63.42],["bigo.sg","Technology",49.03],["un.org","Politics, Advocacy, and Government-Related",41.98],["heapanalytics.com","Business",36.36],["vidiq.com","Business",35.42],["proz.com","Job Search & Careers",34.7],["teol.hu","News & Media",33.31],["pdfbookeditor.live","Technology",32.47],["growave.io","Business",31.35],["onorca.dev","Technology",31.29]],
+IRL:[["aicateringequipments.ie","Food & Drink",73.45],["twinkl.ie","Education",54.55],["ticketmaster.ie","Ecommerce",52.51],["caritas.org.au","Charity and Non-profit",51.67],["carel.com","Business",51.09],["tangled.org","Personal Blogs",50.38],["metagenics.ie","Ecommerce",48.81],["timeout.com","Travel",48.69],["umaryland.edu","Education",47.3],["abb.com","Technology",46.14]],
+ISL:[["wpengine.com","Information Technology",81.08],["alibaba.com","Auctions & Marketplaces",74.67],["typeform.com","Artificial Intelligence",62.31],["podbean.com","Information Technology",57.71],["taobao.com","Ecommerce",57.67],["simplecast.com","Audio Streaming",55.63],["wix.com","Information Technology",54.03],["avg.com","Technology",53.52],["etoro.com","Brokerage & Investing",53.38],["jd.com","Ecommerce",52.53]],
+ITA:[["caviledmuckmentanglo.com","Technology",57.31],["nssmag.com","News & Media",56.85],["grandeippicaitaliana.it","Sports",56.76],["trivago.it","Travel",56.62],["jampp.com","Gaming",53.73],["vidiq.com","Business",52.34],["ecmwf.int","News & Media",47.93],["brunellocucinelli.com","Ecommerce",47.05],["esquire.com","Magazines",41.75],["titanos.tv","Shareware/Freeware",41.61]],
+LIE:[["tradingview.com","Brokerage & Investing",44.5],["avira.com","Information Security",44.06],["github.com","Technology",44.06],["logitech.com","Ecommerce",38.76],["canonical.com","Technology",36.89],["connatix.com","Business",36.88],["rapid7.com","Information Security",36.14],["nytimes.com","News & Media",33.74],["tiktok.com","Social Networks",29.61],["paloaltonetworks.com","Information Technology",28.23]],
+LTU:[["autodoc.lt","Ecommerce",36.86],["clipro.tv","Sports",35.58],["ucoz.ru","Information Technology",34.68],["osmicards.com","Technology",34.22],["bigo.sg","Technology",33.88],["vidiq.com","Business",32.68],["qwant.com","Search Engines",32.67],["kurogames.net","Gaming",32.33],["notino.lt","Fashion",31.29],["miraheze.org","Education",30.93]],
+LUX:[["csa-iot.org","Technology",47.22],["bigo.sg","Technology",43.41],["jivo.ru","Instant Messengers",42.66],["sp.gov.br","Politics, Advocacy, and Government-Related",40.68],["neshan.org","Shareware/Freeware",38.34],["nu.nl","News & Media",35.85],["almalinux.org","Technology",35.78],["roku.com","Ecommerce",35.12],["datto.com","Business",34.36],["pubgmobile.com","Gaming",33.33]],
+LVA:[["kurogames.net","Gaming",48.18],["vidiq.com","Business",45.09],["vfsglobal.com","Politics, Advocacy, and Government-Related",45.08],["band.link","Business",37.55],["failiem.lv","File Sharing",35.18],["blablacar.ru","Travel",35.0],["checkpoint.com","Information Technology",29.19],["fb.gg","Social Networks",28.71],["bitdefender.com","Information Security",27.41],["radiopotok.ru","Audio Streaming",27.4]],
+MCO:[["cloudflare.net","Information Technology",58.47],["jquery.com","Technology",50.99],["33across.com","Business",39.9],["monaco-telecom.mc","Information Technology",38.57],["hcaptcha.com","Information Security",38.37],["batch.com","Business",35.83],["adjust.com","Business",35.71],["snapchat.com","Photography",31.34],["stripe.com","Personal Finance",29.84],["mparticle.com","Business",28.84]],
+MDA:[["ucoz.ru","Information Technology",60.53],["tvrmoldova.md","News & Media",54.74],["sp.gov.br","Politics, Advocacy, and Government-Related",51.35],["stay22.com","Trackers/Analytics",46.86],["udn.com","News & Media",44.86],["kobo.com","Education",43.3],["wenxuecity.com","Forums",42.18],["allegro.pl","Ecommerce",41.81],["openfreemap.org","Technology",41.63],["elefant.md","Fashion",40.87]],
+MNE:[["ntp.org","Technology",42.55],["whatsapp.com","Instant Messengers",41.8],["android.com","Technology",39.39],["utorrent.com","CIPA Filter",37.7],["ya.ru","Search Engines",37.44],["hybrid.ai","Business",36.13],["msn.com","News & Media",35.83],["moengage.com","Business",34.38],["kaspersky.com","Technology",33.59],["eset.com","Technology",32.96]],
+MKD:[["phcorner.org","Forums",58.71],["cafe24.com","Information Technology",54.97],["mse.mk","Brokerage & Investing",47.92],["weibo.cn","Social Networks",46.86],["iherb.com","Ecommerce",44.58],["supabase.com","Business",41.33],["rumble.com","Video Streaming",38.13],["trustarc.com","Information Security",35.66],["tistory.com","Personal Blogs",35.57],["checkpoint.com","Information Technology",34.88]],
+MLT:[["bullshot.io","Economy & Finance",47.19],["klipy.com","Technology",45.18],["mydramawave.com","Movies",42.57],["service-public.fr","Politics, Advocacy, and Government-Related",40.08],["axiom.trade","Brokerage & Investing",39.61],["tenable.com","Information Security",38.1],["virtualbox.org","Technology",37.7],["one.com.mt","News & Media",37.14],["titanos.tv","Shareware/Freeware",36.41],["kargo.com","Business",35.98]],
+NLD:[["vidiq.com","Business",55.39],["escapefromtarkov.com","Gaming",53.42],["titanos.tv","Shareware/Freeware",41.45],["csa-iot.org","Technology",31.2],["band.link","Business",29.17],["iqoo.com","Religion & Spirituality",27.06],["kohls.com","Shopping",26.1],["fortune.com","Magazines",24.97],["kurogames.net","Gaming",24.13],["vodafone.nl","Information Technology",23.59]],
+NOR:[["purehelp.no","Search Engines",51.05],["godeidrettsanlegg.no","Personal Blogs",50.09],["vidiq.com","Business",45.58],["cafe24.com","Information Technology",45.02],["fcquiz.app","Sports",43.93],["nina.no","Education",43.54],["uis.no","Educational Institutions",42.7],["tilbords.no","Food & Drink",42.18],["amazon.pl","Ecommerce",40.52],["psykologtidsskriftet.no","Politics, Advocacy, and Government-Related",39.96]],
+POL:[["gomez.pl","Clothing",74.26],["gowork.pl","Job Search & Careers",56.8],["glami.pl","Coupons",50.36],["manuals.plus","Reference",49.72],["lublin.eu","Travel",48.83],["robimytv.pl","Photography",47.07],["vidiq.com","Business",44.66],["titanos.tv","Shareware/Freeware",41.55],["jscrambler.com","Information Security",39.19],["komputerswiat.pl","News & Media",37.03]],
+PRT:[["sp.gov.br","Politics, Advocacy, and Government-Related",63.7],["sulinformacao.pt","News & Media",51.01],["vidiq.com","Business",48.91],["toysrus.pt","Safe for Kids",46.1],["bigo.sg","Technology",45.58],["notino.pt","Fashion",43.2],["asf.com.pt","Economy & Finance",42.56],["incm.pt","Business",37.71],["altmetric.com","Business",34.81],["createjs.com","Technology",33.07]],
+ROU:[["vidiq.com","Business",52.53],["gentoo.org","Information Technology",48.98],["tistory.com","Personal Blogs",47.95],["secretgarden.ro","Home & Garden",45.22],["verkada.com","Business",44.37],["nodereal.io","Cryptocurrency",42.51],["ucoz.ru","Information Technology",40.55],["tomorrowland.com","Entertainment",40.08],["manuals.plus","Reference",39.25],["m4sport.hu","Music",39.03]],
+SRB:[["vidiq.com","Business",66.05],["hiper.rs","Ecommerce",48.59],["odysee.com","Video Streaming",48.47],["meshy.ai","Artificial Intelligence",46.57],["sp.gov.br","Politics, Advocacy, and Government-Related",40.13],["citrix.com","Business",38.5],["kefir.games","Gaming",38.08],["samsung.com.cn","Home & Garden",38.01],["element.io","Instant Messengers",37.57],["oriontelekom.rs","Information Technology",36.88]],
+RUS:[["bookvoed.ru","Education",72.8],["ucoz.ru","Information Technology",66.31],["vidiq.com","Business",62.11],["uniprof-med.ru","Health & Fitness",57.07],["rsv.ru","Job Search & Careers",52.62],["nplus1.ru","Education",46.34],["regnum.ru","News & Media",44.53],["igromania.ru","Gaming",43.73],["pawns.app","Economy & Finance",41.93],["kurogames.net","Gaming",40.48]],
+SWE:[["vidiq.com","Business",53.21],["cervera.se","Ecommerce",36.94],["titanos.tv","Shareware/Freeware",36.76],["brottsplatskartan.se","News & Media",36.67],["papertrailapp.com","Trackers/Analytics",35.31],["escapefromtarkov.com","Gaming",33.36],["rampanel.com","Business",33.22],["123rf.com","Photography",32.2],["forbes.com","Economy & Finance",31.23],["vegvesen.no","Vehicles",31.04]],
+SVN:[["vidiq.com","Business",53.06],["freenet.de","News & Media",51.18],["bvsalud.org","Education",50.64],["cafe24.com","Information Technology",42.71],["uvic.ca","Educational Institutions",41.81],["ip.sb","Business",41.8],["runnerspace.com","Sports",40.63],["ac.lk","Educational Institutions",40.4],["pcloud.com","File Sharing",39.39],["sp.gov.br","Politics, Advocacy, and Government-Related",35.46]],
+SVK:[["manuals.plus","Reference",64.35],["bigo.sg","Technology",60.81],["tistory.com","Personal Blogs",53.12],["serasaexperian.com.br","Business",52.73],["oracle.com","Technology",51.33],["benulekaren.sk","Ecommerce",49.01],["vidiq.com","Business",48.57],["sp.gov.br","Politics, Advocacy, and Government-Related",48.46],["aktuality.sk","News & Media",43.8],["titanos.tv","Shareware/Freeware",41.39]],
+SMR:[["datadoghq.com","Trackers/Analytics",60.87],["instagram.com","Social Networks",46.67],["slack.com","Instant Messengers",43.23],["iubenda.com","Information Security",35.56],["ubuntu.com","Technology",32.43],["amazon.it","Ecommerce",32.0],["android.com","Technology",31.03],["playstation.com","Gaming",28.4],["netflix.com","Movies",26.32],["amazon.co.uk","Ecommerce",17.46]],
+TUR:[["atv.com.tr","Television",64.33],["fordforums.com.au","Forums",57.99],["vidiq.com","Business",48.42],["cargurus.ca","Vehicles",48.3],["sp.gov.br","Politics, Advocacy, and Government-Related",48.14],["nttgame.com","Gaming",46.81],["ecu.edu","Educational Institutions",45.0],["sony.pl","Technology",44.64],["muziekweb.nl","Music",44.2],["avansas.com","Ecommerce",44.06]],
+UKR:[["kyivlinza.ua","Fashion",71.43],["estro.ua","Clothing",60.18],["vidiq.com","Business",58.97],["jysk.ua","Business",56.76],["plc.ua","Business",56.42],["titanos.tv","Shareware/Freeware",55.85],["jysk.com","Business",54.68],["shein.com","Fashion",49.16],["dila.ua","Health & Fitness",48.99],["csic.es","Education",48.08]]
+}
+};
+
+/* ---------- Label positions (lat, lon) chosen so text sits inside each country ---------- */
+const LABEL_POS = {
+  ALB:[41.1,20.1], AUT:[47.6,14.4], BIH:[44.2,17.8], BEL:[50.6,4.6], BGR:[42.7,25.3], BLR:[53.6,28.0],
+  CHE:[46.8,8.2], CYP:[35.0,33.2], CZE:[49.8,15.4], DEU:[51.0,10.3], DNK:[56.1,9.2], EST:[58.7,25.6],
+  ESP:[40.2,-3.7], FIN:[63.5,26.5], FRA:[46.6,2.4], GBR:[53.0,-1.6], GRC:[39.4,22.0], HRV:[45.5,15.9],
+  HUN:[47.1,19.4], IRL:[53.3,-8.0], ISL:[64.9,-18.6], ITA:[42.8,12.6], LTU:[55.3,23.9], LVA:[56.9,25.0],
+  MDA:[47.2,28.5], MNE:[42.8,19.3], MKD:[41.6,21.7], NLD:[52.3,5.6], NOR:[61.5,9.0], POL:[52.0,19.4],
+  PRT:[39.6,-8.0], ROU:[45.9,24.9], SRB:[44.0,20.9], RUS:[58.5,39.0], SWE:[62.5,15.5], SVN:[46.1,14.8],
+  SVK:[48.7,19.6], TUR:[39.0,35.0], UKR:[49.0,31.5]
+};
+/* Countries where labels must be smaller to avoid collisions */
+const SMALL_LABEL = new Set(["ALB","BIH","MNE","MKD","SVN","MDA","CYP","BEL","NLD","CHE","DNK","EST","LVA","LTU","HRV","SVK","SRB","AUT"]);
+
+/* Shorter category names for on-map labels (full names are kept in hover, legend and side panel) */
+const SHORT_CAT = {
+  "Politics, Advocacy, and Government-Related": "Politics & Gov.",
+  "Educational Institutions": "Edu. Institutions",
+  "Information Technology": "IT",
+  "Job Search & Careers": "Jobs & Careers",
+  "Shareware/Freeware": "Freeware",
+  "Trackers/Analytics": "Analytics",
+  "Auctions & Marketplaces": "Marketplaces",
+  "Brokerage & Investing": "Investing",
+  "Economy & Finance": "Finance"
+};
+
+/* 20 clearly distinct colours, light enough for dark label text */
+const PALETTE = ["#4e79a7","#f28e2b","#e15759","#76b7b2","#59a14f","#edc948","#b07aa1","#ff9da7","#9c755f","#bab0ac",
+                 "#a0cbe8","#ffbe7d","#8cd17d","#f1ce63","#86bcb6","#d37295","#fabfd2","#b6992d","#d4a6c8","#499894"];
+
+const FONT = 'Calibri, Carlito, "Segoe UI", Arial, sans-serif';
+const DEFAULT_GEO = { lonaxis: { range: [-25, 45] }, lataxis: { range: [34, 71.5] } };
+
+/* ---------- Helpers ---------- */
+const cleanCat = c => (typeof c === "string" && c.trim()) ? c : "Uncategorized";
+const escapeHtml = s => String(s).replace(/[&<>"]/g, ch => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[ch]));
+const formatDate = d => new Date(d + "T00:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+
+const dates = Object.keys(RAW).sort();
+let currentDate = dates[dates.length - 1];
+let selectedIso = null;
+let labelMode = "full";
+let colorOf = {};
+
+const mapEl = document.getElementById("europe-map");
+const dateSelect = document.getElementById("dateSelect");
+const labelSelect = document.getElementById("labelSelect");
+
+dates.forEach(d => {
+  const o = document.createElement("option");
+  o.value = d;
+  o.textContent = formatDate(d);
+  dateSelect.appendChild(o);
+});
+dateSelect.value = currentDate;
+
+/* ---------- Build the figure for a date ---------- */
+function buildFigure(date) {
+  const day = RAW[date];
+  const isos = Object.keys(day);
+
+  // Colour only the categories that are actually top somewhere on this date
+  const counts = {};
+  isos.forEach(iso => {
+    const cat = cleanCat(day[iso][0][1]);
+    counts[cat] = (counts[cat] || 0) + 1;
+  });
+  const cats = Object.keys(counts).sort((a, b) => counts[b] - counts[a] || a.localeCompare(b));
+  colorOf = {};
+  cats.forEach((c, i) => { colorOf[c] = PALETTE[i % PALETTE.length]; });
+
+  const n = cats.length;
+  const colorscale = [];
+  cats.forEach((c, i) => { colorscale.push([i / n, colorOf[c]], [(i + 1) / n, colorOf[c]]); });
+
+  const choropleth = {
+    type: "choropleth",
+    locationmode: "ISO-3",
+    locations: isos,
+    z: isos.map(iso => cats.indexOf(cleanCat(day[iso][0][1])) + 0.5),
+    zmin: 0, zmax: n,
+    colorscale,
+    showscale: false,
+    marker: {
+      line: {
+        color: isos.map(iso => iso === selectedIso ? "#D95300" : "#ffffff"),
+        width: isos.map(iso => iso === selectedIso ? 3 : 0.8)
+      }
+    },
+    customdata: isos.map(iso => {
+      const top = day[iso][0];
+      return [NAMES[iso], top[0], cleanCat(top[1]), top[2]];
+    }),
+    hovertemplate: "<b>%{customdata[0]}</b><br>Top website: %{customdata[1]}<br>Category: %{customdata[2]}<br>Rank change: %{customdata[3]:.2f}%<extra></extra>",
+    hoverlabel: { bgcolor: "#ffffff", bordercolor: "#D95300", font: { family: FONT, size: 14, color: "#1e293b" } }
+  };
+
+  const labelIsos = isos.filter(iso => LABEL_POS[iso]);
+  const labels = {
+    type: "scattergeo",
+    mode: "text",
+    lat: labelIsos.map(iso => LABEL_POS[iso][0]),
+    lon: labelIsos.map(iso => LABEL_POS[iso][1]),
+    text: labelIsos.map(iso => {
+      const [domain, cat] = day[iso][0];
+      const c = cleanCat(cat);
+      return labelMode === "full"
+        ? "<b>" + escapeHtml(domain) + "</b><br>(" + escapeHtml(SHORT_CAT[c] || c) + ")"
+        : "<b>" + escapeHtml(domain) + "</b>";
+    }),
+    textfont: {
+      family: FONT,
+      color: "#0f172a",
+      size: labelIsos.map(iso => SMALL_LABEL.has(iso) ? 9 : 11)
+    },
+    hoverinfo: "skip",
+    visible: labelMode !== "off",
+    showlegend: false
+  };
+
+  const layout = {
+    margin: { l: 0, r: 0, t: 0, b: 0 },
+    paper_bgcolor: "#eef3f8",
+    font: { family: FONT, color: "#1e293b" },
+    dragmode: "pan",
+    showlegend: false,
+    uirevision: "keep-zoom",
+    geo: {
+      scope: "europe",
+      projection: { type: "mercator" },
+      ...JSON.parse(JSON.stringify(DEFAULT_GEO)),
+      showframe: false,
+      showcoastlines: false,
+      showland: true, landcolor: "#dde4ec",
+      showocean: true, oceancolor: "#eef3f8",
+      showlakes: true, lakecolor: "#eef3f8",
+      showcountries: true, countrycolor: "#ffffff",
+      bgcolor: "#eef3f8"
+    }
+  };
+
+  return { data: [choropleth, labels], layout, cats, counts };
+}
+
+/* ---------- Render ---------- */
+function render() {
+  const fig = buildFigure(currentDate);
+  Plotly.react(mapEl, fig.data, fig.layout, {
+    responsive: true,
+    scrollZoom: true,
+    displaylogo: false,
+    modeBarButtonsToRemove: ["select2d", "lasso2d"]
+  });
+  renderLegend(fig.cats, fig.counts);
+  renderDetails();
+}
+
+function renderLegend(cats, counts) {
+  const legend = document.getElementById("legend");
+  legend.innerHTML = "";
+  cats.forEach(cat => {
+    const item = document.createElement("div");
+    item.className = "legend-item";
+    const sw = document.createElement("span");
+    sw.className = "swatch";
+    sw.style.background = colorOf[cat];
+    const label = document.createElement("span");
+    label.textContent = cat + " ";
+    const count = document.createElement("span");
+    count.className = "legend-count";
+    count.textContent = "(" + counts[cat] + ")";
+    label.appendChild(count);
+    item.append(sw, label);
+    legend.appendChild(item);
+  });
+}
+
+function renderDetails() {
+  const panel = document.getElementById("details");
+  panel.innerHTML = "";
+
+  if (!selectedIso || !RAW[currentDate][selectedIso]) {
+    const h = document.createElement("h2");
+    h.textContent = "Explore a country";
+    const p = document.createElement("p");
+    p.className = "hint";
+    p.textContent = "Click any country on the map to see its top 10 trending websites for " + formatDate(currentDate) + ".";
+    panel.append(h, p);
+    return;
+  }
+
+  const list = RAW[currentDate][selectedIso];
+  const h = document.createElement("h2");
+  h.textContent = NAMES[selectedIso];
+  const p = document.createElement("p");
+  p.className = "hint";
+  p.textContent = "Top 10 trending websites, " + formatDate(currentDate);
+  panel.append(h, p);
+
+  const max = Math.max(...list.map(d => d[2]));
+  list.forEach(([domain, cat, change], i) => {
+    const item = document.createElement("div");
+    item.className = "domain-item";
+
+    const name = document.createElement("div");
+    name.className = "domain-name";
+    const rank = document.createElement("span");
+    rank.className = "rank";
+    rank.textContent = "#" + (i + 1);
+    name.append(rank, document.createTextNode(domain));
+
+    const category = document.createElement("div");
+    category.className = "category";
+    const sw = document.createElement("span");
+    sw.className = "swatch";
+    sw.style.background = colorOf[cleanCat(cat)] || "#cbd5e1";
+    category.append(sw, document.createTextNode(cleanCat(cat)));
+
+    const barRow = document.createElement("div");
+    barRow.className = "bar-row";
+    const bar = document.createElement("div");
+    bar.className = "bar";
+    const fill = document.createElement("span");
+    fill.style.width = (change / max * 100) + "%";
+    bar.appendChild(fill);
+    const val = document.createElement("span");
+    val.textContent = "+" + Number(change).toFixed(2) + "%";
+    barRow.append(bar, val);
+
+    item.append(name, category, barRow);
+    panel.appendChild(item);
+  });
+}
+
+/* ---------- Events ---------- */
+dateSelect.addEventListener("change", e => { currentDate = e.target.value; render(); });
+labelSelect.addEventListener("change", e => { labelMode = e.target.value; render(); });
+document.getElementById("resetView").addEventListener("click", () => {
+  Plotly.relayout(mapEl, {
+    "geo.lonaxis.range": DEFAULT_GEO.lonaxis.range,
+    "geo.lataxis.range": DEFAULT_GEO.lataxis.range,
+    "geo.projection.scale": 1
+  });
+});
+
+render();
+mapEl.on("plotly_click", ev => {
+  const pt = ev.points && ev.points[0];
+  if (!pt || !pt.location) return;
+  selectedIso = pt.location;
+  render();
+});
+</script>
+</body>
+</html>

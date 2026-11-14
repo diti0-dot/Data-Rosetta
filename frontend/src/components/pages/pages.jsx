@@ -146,6 +146,42 @@ export function FAQ() {
   );
 }
 
+import { Link } from "react-router-dom";
+
+export function Data_stories() {
+  return (
+    <div className="page data-stories">
+      <h1 className="legal-title">Data Stories</h1>
+
+      <div className="stories-grid">
+        <Link to="/data-stories/microsoft-outage" className="story-card">
+          <h2 className="story-card-title">
+            Trending Websites Across Europe During the Microsoft Outage
+          </h2>
+          <p className="story-card-text">
+            The websites that were trending across Europe during the Microsoft 365
+            outage, November 12–13, 2026.
+          </p>
+          <span className="story-card-link">View</span>
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+export function MicrosoftOutageStory() {
+  return (
+    <div className="page">
+      <iframe
+        src="/microsoft-outage-trends.html"
+        title="Trending websites across Europe during the Microsoft outage"
+        style={{ width: "100%", height: "2000px", border: 0, display: "block" }}
+      />
+    </div>
+  );
+}
+
+
 export function Disclaimer() {
   return (
     <div className="page legal">

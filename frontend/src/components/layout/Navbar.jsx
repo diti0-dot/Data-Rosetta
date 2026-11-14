@@ -3,7 +3,7 @@ import { Link, Route, Routes } from "react-router-dom";
 import heroIcon from "../../assets/icon.png";
 import Banner from '../home/banner.jsx';
 import Accessibility from '../accessibility/accessibility.jsx'
-import { How_works, FAQ,Disclaimer,Terms,Privacy,Contact} from '../pages/pages.jsx';
+import { How_works, FAQ,Disclaimer,Terms,Privacy,Contact, Data_stories,MicrosoftOutageStory } from '../pages/pages.jsx';
 import './Navbar.css';
 
 function Home() {
@@ -18,6 +18,10 @@ function How_works_header() {
 
 function FAQ_header() {
   <FAQ/>
+}
+
+function Data_stories_header() {
+  <Data_stories/>
 }
 
 function Accessibility_header() {
@@ -52,6 +56,7 @@ function Navbar() {
           />
           <Link to="/" className="navbar-link">Home</Link>
           <Link to="/data-accessibility" className="navbar-link">Accessibility</Link>
+          <Link to="/data-stories" className="navbar-link">Data Stories</Link>
           <Link to="/how_it_works" className="navbar-link">How it works</Link>
           <Link to="/FAQ" className="navbar-link">FAQ</Link>
         </div>
@@ -61,11 +66,13 @@ function Navbar() {
         <Route path="/" element={<Home />} />
         <Route path="/how_it_works" element={<How_works />} />
         <Route path="/FAQ" element={<FAQ />} />
+        <Route path="/data-stories" element={<Data_stories/>} />
         <Route path="/data-accessibility" element={<Accessibility />} />
         <Route path="/disclaimer" element={<Disclaimer />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/privacy" element={<Privacy />} />
-        <Route path="/contact" element={<Contact />} />
+        <Route path="/contact" element={<Contact />} /> 
+        <Route path="/data-stories/microsoft-outage" element={<MicrosoftOutageStory />} />
       </Routes>
 
 

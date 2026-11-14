@@ -180,3 +180,67 @@
 .legal a {
   color: #D95300;
 }
+
+
+.data-stories {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  background-color: #ffffff;
+  color: #333333;
+  font-family: Calibri, Carlito, sans-serif;
+  box-sizing: border-box;
+}
+
+.stories-title {
+  color: #D95300;
+  font-size: 40px;
+  margin: 0 0 24px;
+}
+
+.stories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.story-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 24px;
+  background-color: #ffffff;
+  border: 2px solid #D95300;
+  border-radius: 12px;
+  text-decoration: none;
+  color: #333333;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.story-card:hover {
+  background-color: #fff3e0;
+}
+
+.story-card:focus-visible {
+  outline: 2px solid #000000;
+  outline-offset: 2px;
+}
+
+.story-card-title {
+  color: #000000;
+  font-size: 22px;
+  margin: 0;
+}
+
+.story-card-text {
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.story-card-link {
+  color: #D95300;
+  font-weight: bold;
+  font-size: 16px;
+  margin-top: auto;
+}
